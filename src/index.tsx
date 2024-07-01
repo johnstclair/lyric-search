@@ -22,7 +22,7 @@ interface SearchHit {
 }
 
 interface SearchSections {
-  hits: SearchHit;
+  hits: SearchHit[];
 }
 
 interface SearchResponse {
@@ -38,7 +38,9 @@ async function fetchGeniusSearch(query: string) {
     const response = await axios.get(`${GENIUS_SEARCH_URL}${encodeURIComponent(query)}`);
     const data: SearchData = response.data;
 
-    return data.response.sections[0].hits;
+    const hits = data.response.sections[0].hits as SearchHit[];
+
+    return hits;
   } catch (error) {
     console.error("Error searching lyrics:", error);
     showToast(Toast.Style.Failure, "Failed to fetch data from Genius");
@@ -55,8 +57,8 @@ export default function Command() {
     const fetchResults = async () => {
       if (searchQuery) {
         setIsLoading(true);
-        const searchHits: SearchHit = await fetchGeniusSearch(searchQuery);
-        setResults([searchHits]);
+        const searchHits: SearchHit[] = await fetchGeniusSearch(searchQuery);
+        setResults(searchHits);
         setIsLoading(false);
       } else {
         setResults([]);
