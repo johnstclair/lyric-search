@@ -56,7 +56,7 @@ export default function Command() {
       if (searchQuery) {
         setIsLoading(true);
         const searchHits: SearchHit = await fetchGeniusSearch(searchQuery);
-        setResults(searchHits);
+        setResults([searchHits]);
         setIsLoading(false);
       } else {
         setResults([]);
@@ -78,12 +78,8 @@ export default function Command() {
             <ActionPanel title="Actions">
               <Action.OpenInBrowser url={hit.result.url} />
               <Action.CopyToClipboard
-                title="Copy Song Title and Artist Name"
+                title="Copy Song and Artist to Clipboard"
                 content={`${hit.result.title} by ${hit.result.primary_artist.name}`}
-              />
-              <Action.CopyToClipboard
-                title="Copy Search API URL"
-                content={`${GENIUS_SEARCH_URL}${encodeURIComponent(searchQuery)}`}
               />
             </ActionPanel>
           }
